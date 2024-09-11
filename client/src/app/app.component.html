@@ -1,8 +1,4 @@
-<h1>{{title}}</h1>
-
-<ul>
-
-  @for (item of users$ | async; track item.id) {
-    <li>Name: {{item.userName}}</li>  
-  }
-</ul>
+<app-navbar />
+<section class="content container">
+  <router-outlet />
+</section>
