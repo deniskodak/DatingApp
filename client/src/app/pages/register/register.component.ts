@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -7,22 +7,21 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import { AccountService, RegisterForm, UserDTO, UsersService } from '@shared';
+import { Router, RouterModule } from '@angular/router';
+import { AccountService, RegisterForm, UsersService } from '@shared';
 import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   private accountService = inject(AccountService);
   private usersService = inject(UsersService);
-
-  cancel = output();
-  register = output<UserDTO>();
+  private router = inject(Router);
 
   registerForm = new FormGroup<RegisterForm>({
     username: new FormControl('', {
@@ -60,11 +59,7 @@ export class RegisterComponent {
     if (this.registerForm.invalid) return this.registerForm.markAllAsTouched();
 
     this.accountService.register(this.registerForm.value).subscribe({
-      next: (user) => this.register.emit(user)
+      next: () => this.router.navigateByUrl('/members')
     });
-  }
-
-  handleCancel(): void {
-    this.cancel.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +11,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService, LetDirective, LoginForm } from '@shared';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -25,15 +25,17 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     ReactiveFormsModule,
     AsyncPipe,
     LetDirective,
-    BsDropdownModule
+    BsDropdownModule,
+    TitleCasePipe
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent {
-  accountService = inject(AccountService);
-  destroyRef = inject(DestroyRef);
+  private accountService = inject(AccountService);
+  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   user$$ = this.accountService.currentUser$$;
 
   loginForm = new FormGroup<LoginForm>({
@@ -52,9 +54,11 @@ export class NavbarComponent {
     this.accountService
       .login(this.loginForm.value)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res) => {
-        this.loginForm.reset();
-        console.log(res);
+      .subscribe({
+        next: () => {
+          this.loginForm.reset();
+          this.router.navigateByUrl('/members');
+        }
       });
   }
 
@@ -62,6 +66,8 @@ export class NavbarComponent {
     this.accountService
       .logout()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe({
+        next: () => this.router.navigateByUrl('/')
+      });
   }
 }

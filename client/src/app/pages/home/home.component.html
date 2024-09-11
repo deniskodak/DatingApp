@@ -1,26 +1,14 @@
 <section class="mt-5">
-  @if(!registerMode) {
   <div class="text-center">
     <h1>Find your match</h1>
     <p class="lead">
       Come on in to view your matches... add you need to do is sign up!
     </p>
     <div class="text-center mb-4">
-      <button
-        class="btn btn-primary btn-lg me-2"
-        (click)="toggleRegisterMode()">
+      <button class="btn btn-primary btn-lg me-2" [routerLink]="['register']">
         Register
       </button>
       <button class="btn btn-info btn-lg">Lear more</button>
     </div>
   </div>
-  } @else {
-  <div class="row justify-content-center">
-    <div class="col-4">
-      <app-register
-        (cancel)="toggleRegisterMode()"
-        (register)="handleRegister($event)" />
-    </div>
-  </div>
-  }
 </section>
