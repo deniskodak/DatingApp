@@ -1,8 +1,6 @@
 import { AsyncPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Observable } from 'rxjs';
 import { NavbarComponent } from './core/navbar/navbar.component';
 import { AccountService } from './shared/services';
 
