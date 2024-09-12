@@ -55,5 +55,23 @@ export const routes: Routes = [
         (m) => m.RegisterComponent
       ),
     canActivate: [createAuthorizeGuard('public')]
+  },
+  {
+    path: 'not-found',
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      )
+  },
+  {
+    path: 'server-error',
+    loadComponent: () =>
+      import('./pages/server-error/server-error.component').then(
+        (m) => m.ServerErrorComponent
+      )
+  },
+  {
+    path: '**',
+    redirectTo: 'not-found'
   }
 ];

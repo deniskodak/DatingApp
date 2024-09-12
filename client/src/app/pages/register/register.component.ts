@@ -16,7 +16,6 @@ import { map, Observable } from 'rxjs';
   standalone: true,
   imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   private accountService = inject(AccountService);

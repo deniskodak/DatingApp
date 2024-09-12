@@ -19,16 +19,9 @@ export interface AppUser {
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  http = inject(HttpClient);
   private accountService = inject(AccountService);
-  title = 'client';
-  users$: Observable<AppUser[]> | null = null;
 
   ngOnInit(): void {
     this.accountService.getUserFromStorage();
-  }
-
-  getUsers(): void {
-    this.users$ = this.http.get<AppUser[]>('https://localhost:5001/api/users');
   }
 }
