@@ -1,10 +1,13 @@
+using API.Data;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddSwaggerServices();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
@@ -26,5 +29,22 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// allow get access to registered services
+// pattern service locator
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    // applies migraitons and create db if its not created
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(context);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error ocurred during migration");
+}
 
 app.Run();
